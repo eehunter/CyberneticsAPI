@@ -1,8 +1,8 @@
-package net.fabricmc.example
+package com.oyosite.ticon.cyberlib
 
 import net.fabricmc.api.ModInitializer
 
-class ExampleMod : ModInitializer {
+class CyberLib : ModInitializer {
 
     override fun onInitialize() {
         //TODO - "Not yet implemented"
