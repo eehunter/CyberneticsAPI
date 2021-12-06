@@ -6,6 +6,9 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtElement
+
 
 class CyberwareLayerPower(type: PowerType<*>, val entity: LivingEntity, val slots: List<String>) : Power(type, entity), Inventory {
     val items = Array<ItemStack>(slots.size){ItemStack.EMPTY}
@@ -31,5 +34,14 @@ class CyberwareLayerPower(type: PowerType<*>, val entity: LivingEntity, val slot
 
     override fun canPlayerUse(player: PlayerEntity?): Boolean = true
 
-    
+    override fun toTag(): NbtCompound {
+        val tag = NbtCompound()
+        slots.forEachIndexed{i, s -> tag.put(s, items[i].writeNbt(NbtCompound()))}
+        return tag
+    }
+
+    override fun fromTag(e: NbtElement) {
+        val tag = e as NbtCompound
+        slots.forEachIndexed{i, s -> if (tag.contains(s)) items[i] = ItemStack.fromNbt(tag.getCompound(s))}
+    }
 }
