@@ -16,11 +16,9 @@ class CyberLayerScreen(private val handler: CyberLayerScreenHandler, inv: Player
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, TEXTURE)
-        var x = (width - backgroundWidth) / 2
-        var y = (height - backgroundHeight) / 2
+        val x = (width - backgroundWidth) / 2
+        val y = (height - backgroundHeight) / 2
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
-        x+=4// = (width-18)/2
-        y+=4
-        handler.power.slotPos.forEach { drawTexture(matrices, x+it.first, y+it.second, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
+        handler.power.slotPos.forEach { drawTexture(matrices, x+it.first-1, y+it.second-1, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
     }
 }

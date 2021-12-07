@@ -23,6 +23,12 @@
         "adapter": "kotlin",
         "value": "com.oyosite.ticon.cyberlib.CyberLib"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.oyosite.ticon.cyberlib.CyberLibClient"
+      }
     ]
   },
   "mixins": [
