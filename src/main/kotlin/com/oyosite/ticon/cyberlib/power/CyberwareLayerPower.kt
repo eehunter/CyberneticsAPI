@@ -1,7 +1,15 @@
 package com.oyosite.ticon.cyberlib.power
 
+import com.oyosite.ticon.cyberlib.CyberLib.MODID
+import com.oyosite.ticon.cyberlib.data.CLSerializableDataTypes.CYBER_SLOT_DATA_LIST
+import com.oyosite.ticon.cyberlib.data.CyberSlotData
+import com.oyosite.ticon.cyberlib.data.CyberSlotData.Companion.ids
+import com.oyosite.ticon.cyberlib.data.CyberSlotData.Companion.pos
+import com.oyosite.ticon.cyberlib.data.SDKotlin
 import io.github.apace100.apoli.power.Power
 import io.github.apace100.apoli.power.PowerType
+import io.github.apace100.apoli.power.factory.PowerFactory
+import io.github.apace100.calio.data.SerializableData
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
@@ -9,6 +17,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
 import net.minecraft.util.Identifier
+import java.util.function.BiFunction
 
 
 class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: List<String>, val slotPos: List<Pair<Int, Int>>) : Power(type, entity), Inventory {
@@ -47,5 +56,12 @@ class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: L
     override fun fromTag(e: NbtElement) {
         val tag = e as NbtCompound
         slots.forEachIndexed{i, s -> if (tag.contains(s)) {items[i] = ItemStack.fromNbt(tag.getCompound(s)); addPowerForItem(items[i], Identifier(s), entity)}}
+    }
+
+    companion object{
+        private val SerializableData.Instance.slotData get() = get("slot_data") as List<CyberSlotData>
+        fun createFactory() = PowerFactory(Identifier(MODID, "cyberware_layer"),
+            SDKotlin()("slot_data", CYBER_SLOT_DATA_LIST)
+        ) { data -> BiFunction{ type, entity -> CyberwareLayerPower(type, entity, data.slotData.ids(), data.slotData.pos()) } }
     }
 }

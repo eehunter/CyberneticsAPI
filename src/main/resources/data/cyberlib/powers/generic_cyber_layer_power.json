@@ -1,0 +1,6 @@
+{
+  "type": "cyberlib:cyberware_layer",
+  "slot_data": [
+    ["cyberlib:generic_slot", 10, 10]
+  ]
+}
