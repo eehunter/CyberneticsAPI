@@ -8,10 +8,11 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
+import net.minecraft.util.Identifier
 
 
-class CyberwareLayerPower(type: PowerType<*>, val entity: LivingEntity, val slots: List<String>) : Power(type, entity), Inventory {
-    val items = Array<ItemStack>(slots.size){ItemStack.EMPTY}
+class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: List<String>, val slotPos: List<Pair<Int, Int>>) : Power(type, entity), Inventory {
+    private val items = Array<ItemStack>(slots.size){ItemStack.EMPTY}
 
 
     override fun clear() { for (i in items.indices) items[i] = ItemStack.EMPTY }
@@ -24,9 +25,12 @@ class CyberwareLayerPower(type: PowerType<*>, val entity: LivingEntity, val slot
 
     fun getStack(slot: String): ItemStack = getStack(slots.indexOf(slot))
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack = items[slot].split(amount)
+    override fun removeStack(slot: Int, amount: Int): ItemStack {
+        if (amount >= items[slot].count) removePowerForItem(items[slot],Identifier(slots[slot]),entity)
+        return items[slot].split(amount)
+    }
 
-    override fun removeStack(slot: Int): ItemStack { val s = items[slot]; items[slot] = ItemStack.EMPTY; return s }
+    override fun removeStack(slot: Int): ItemStack { val s = items[slot]; items[slot] = ItemStack.EMPTY; removePowerForItem(s, Identifier(slots[slot]), entity); return s }
 
     override fun setStack(slot: Int, stack: ItemStack?) { items[slot] = stack ?: ItemStack.EMPTY }
 
@@ -42,6 +46,6 @@ class CyberwareLayerPower(type: PowerType<*>, val entity: LivingEntity, val slot
 
     override fun fromTag(e: NbtElement) {
         val tag = e as NbtCompound
-        slots.forEachIndexed{i, s -> if (tag.contains(s)) items[i] = ItemStack.fromNbt(tag.getCompound(s))}
+        slots.forEachIndexed{i, s -> if (tag.contains(s)) {items[i] = ItemStack.fromNbt(tag.getCompound(s)); addPowerForItem(items[i], Identifier(s), entity)}}
     }
 }
