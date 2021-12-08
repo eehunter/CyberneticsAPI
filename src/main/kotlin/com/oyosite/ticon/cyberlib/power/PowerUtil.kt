@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtElement
 import net.minecraft.util.Identifier
 
 fun getPowersForItem(item: ItemStack, slot: Identifier, entity: LivingEntity): List<PowerType<*>>{
-    val nbt = item.getSubNbt("cyber_data") ?: return listOf()
+    val nbt = item.getSubNbt("cyberdata") ?: return listOf()
     if (!nbt.contains("powers")) return listOf()
     val p = nbt.getList("powers", NbtElement.STRING_TYPE.toInt())
     val powers = List(p.size) { Identifier(p.getString(it)) }

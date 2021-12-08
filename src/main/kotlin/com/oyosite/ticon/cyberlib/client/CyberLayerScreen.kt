@@ -21,4 +21,5 @@ class CyberLayerScreen(private val handler: CyberLayerScreenHandler, inv: Player
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
         handler.power.slotPos.forEach { drawTexture(matrices, x+it.first-1, y+it.second-1, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
     }
+
 }
