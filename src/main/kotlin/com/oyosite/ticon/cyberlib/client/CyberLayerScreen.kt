@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier
 
 
 class CyberLayerScreen(private val handler: CyberLayerScreenHandler, inv: PlayerInventory, title: Text) : HandledScreen<CyberLayerScreenHandler>(handler, inv, title) {
-    val TEXTURE = Identifier( "textures/gui/container/dispenser.png")
+    val TEXTURE = Identifier(MODID, "textures/gui/container/cyberware.png")
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
@@ -20,6 +20,17 @@ class CyberLayerScreen(private val handler: CyberLayerScreenHandler, inv: Player
         val y = (height - backgroundHeight) / 2
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
         handler.power.slotPos.forEach { drawTexture(matrices, x+it.first-1, y+it.second-1, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
+    }
+
+    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+        renderBackground(matrices)
+        super.render(matrices, mouseX, mouseY, delta)
+        drawMouseoverTooltip(matrices, mouseX, mouseY)
+    }
+
+    override fun init() {
+        super.init()
+        titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
     }
 
 }

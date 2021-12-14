@@ -5,6 +5,7 @@ import io.github.apace100.apoli.power.Power
 import io.github.apace100.apoli.power.PowerType
 import io.github.apace100.apoli.power.PowerTypeRegistry
 import io.github.apace100.apoli.power.PowerTypes
+import io.github.apace100.apoli.power.factory.PowerFactories
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtElement

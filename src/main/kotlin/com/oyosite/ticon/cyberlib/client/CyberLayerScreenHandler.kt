@@ -36,19 +36,30 @@ class CyberLayerScreenHandler(syncId: Int, val inv: PlayerInventory, id: Identif
     override fun canUse(player: PlayerEntity?): Boolean = power.canPlayerUse(player)
     private class CyberSlot(power:CyberwareLayerPower, slot: Int, x: Int, y: Int): Slot(power,slot,x,y){
         val power: CyberwareLayerPower get() = inventory as CyberwareLayerPower
-        override fun canInsert(stack: ItemStack): Boolean {//= stack.getSubNbt("cyberdata")?.getList("slots", NbtElement.STRING_TYPE.toInt())?.map { (it as NbtString).asString()!! }?.any { println(it); it == "*" || it == (inventory as CyberwareLayerPower).slots[index] } ?:false
-            val dat = stack.getSubNbt("cyberdata")
+        override fun canInsert(stack: ItemStack): Boolean = stack.getSubNbt("cyberdata")?.getList("slots", NbtElement.STRING_TYPE.toInt())?.map { (it as NbtString).asString()!! }?.any { it == "*" || it == power.slots[index] } ?:false
+            /*val dat = stack.getSubNbt("cyberdata")
             if (dat == null) { println("data is null"); return false }
-            val slotNBT = dat.getList("slots", NbtElement.STRING_TYPE.toInt())
+            val slotNBT = dat.getList("slots", NbtElement.STRING_TYPE.toInt())-
             if (slotNBT == null) { println("slots is null"); return false }
             val slots = slotNBT.map{ it.asString() }
             //println(slots)
             return slots.any { it == "*" || it == power.slots[index] }
-        }
+        }*/
     }
     private fun cyberSlot(power:CyberwareLayerPower, slot: String) : Slot{
         val i = power.slots.indexOf(slot)
         val p = power.slotPos[i]
         return CyberSlot(power, i, p.first, p.second)
+    }
+
+    override fun transferSlot(player: PlayerEntity?, index: Int): ItemStack {
+        val slot = slots[index]
+        val oldStack = slot.stack ?: return ItemStack.EMPTY
+        val stack = oldStack.copy()
+        if (index < power.size()){ if(!insertItem(oldStack, power.size(), slots.size, true)) return ItemStack.EMPTY }
+        else if (!insertItem(oldStack, 0, power.size(), false)) return ItemStack.EMPTY
+        if (oldStack.isEmpty) slot.setStack(ItemStack.EMPTY)
+        else slot.markDirty()
+        return stack
     }
 }
