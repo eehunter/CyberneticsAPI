@@ -16,14 +16,10 @@ import net.minecraft.util.registry.Registry
 class CyberForgeRecipe(
     private val _id: Identifier,
     val addition: Ingredient,
-    val nbtPredicates: List<CyberwareNbtPredicate>,
+    val condition: ApoliCondition<ItemStack>,
     val outputData: List<NbtTransformer>
 ) : Recipe<Inventory> {
-    override fun matches(inv: Inventory, world: World): Boolean {
-        val augment = inv.getStack(0)
-        val cyberData = augment.getSubNbt("cyberdata")?:return false
-        return addition.test(inv.getStack(1)) && nbtPredicates.all{it(cyberData)}
-    }
+    override fun matches(inv: Inventory, world: World): Boolean = addition.test(inv.getStack(1)) && condition.test(inv.getStack(0))
 
     override fun craft(inv: Inventory): ItemStack {
         val otpt = inv.getStack(0).copy()
