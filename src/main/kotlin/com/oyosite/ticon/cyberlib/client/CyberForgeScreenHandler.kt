@@ -12,17 +12,28 @@ import net.minecraft.screen.ScreenHandlerContext
 
 class CyberForgeScreenHandler(syncId: Int, inv: PlayerInventory) : ForgingScreenHandler(CYBER_FORGE_SCREEN_HANDLER, syncId, inv, ScreenHandlerContext.EMPTY) {
 
-    private var recipe: CyberForgeRecipe? = null;
+    private var recipe: CyberForgeRecipe? = null
+    private val world get() = player.world
 
     override fun canUse(state: BlockState?): Boolean = true
 
-    override fun canTakeOutput(player: PlayerEntity, present: Boolean): Boolean = recipe?.matches(input, player.world)?:false
+    override fun canTakeOutput(player: PlayerEntity, present: Boolean): Boolean = recipe?.matches(input, world)?:false
 
     override fun onTakeOutput(player: PlayerEntity, stack: ItemStack) {
-        TODO("Not yet implemented")
+        stack.onCraft(world, player, stack.count)
+        output.unlockLastRecipe(player)
+        input.getStack(0).count--
+        input.getStack(1).count--
     }
 
     override fun updateResult() {
-        TODO("Not yet implemented")
+        val recipes = world.recipeManager.getAllMatches(CyberForgeRecipe.TYPE, input, world)
+        if (recipes.isEmpty()) output.setStack(0, ItemStack.EMPTY)
+        else {
+            recipe = recipes[0]
+            val otpt = recipe!!.craft(input, world)
+            output.lastRecipe = recipe
+            output.setStack(0, otpt)
+        }
     }
 }

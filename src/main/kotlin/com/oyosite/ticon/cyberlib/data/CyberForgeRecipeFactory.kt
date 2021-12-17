@@ -1,21 +1,24 @@
 package com.oyosite.ticon.cyberlib.data
 
 import com.google.gson.JsonElement
-import com.oyosite.ticon.cyberlib.data.CLSerializableDataTypes.NBT_TRANSFORMER_LIST
+import io.github.apace100.apoli.power.factory.action.ActionFactory
+import io.github.apace100.apoli.power.factory.action.ActionTypes
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory
 import io.github.apace100.apoli.power.factory.condition.ConditionTypes
 import io.github.apace100.calio.data.SerializableDataType
-import io.github.apace100.calio.data.SerializableDataTypes
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.recipe.Ingredient
 import net.minecraft.util.Identifier
+import net.minecraft.util.Pair
+import net.minecraft.world.World
 import java.util.function.BiConsumer
 
 typealias JFunction<T, R> = java.util.function.Function<T, R>
 typealias ApoliCondition<T> = ConditionFactory<T>.Instance
+typealias ApoliAction<T> = ActionFactory<T>.Instance
+typealias ItemAction = ApoliAction<Pair<World, ItemStack>>
 
-class CyberForgeRecipeFactory(val id: Identifier?, val addition: Ingredient, val condition: ApoliCondition<ItemStack>, val outputData: List<NbtTransformer>) : (Identifier) -> CyberForgeRecipe {
+class CyberForgeRecipeFactory(val id: Identifier?, val addition: ApoliCondition<ItemStack>, val condition: ApoliCondition<ItemStack>, val outputData: ItemAction) : (Identifier) -> CyberForgeRecipe {
     constructor(recipe: CyberForgeRecipe) : this(recipe.id, recipe.addition, recipe.condition, recipe.outputData)
     override fun invoke(id: Identifier) = CyberForgeRecipe(this.id?:id, addition, condition, outputData)
     companion object{
@@ -23,14 +26,14 @@ class CyberForgeRecipeFactory(val id: Identifier?, val addition: Ingredient, val
             buf.writeIdentifier(factory.id)
             factory.addition.write(buf)
             factory.condition.write(buf)
-            NBT_TRANSFORMER_LIST.send(buf, factory.condition)
+            factory.outputData.write(buf)
         }
         private val receive = JFunction { buf: PacketByteBuf ->
-            CyberForgeRecipeFactory(buf.readIdentifier(), Ingredient.fromPacket(buf), ConditionTypes.ITEM.read(buf), NBT_TRANSFORMER_LIST.receive(buf))
+            CyberForgeRecipeFactory(buf.readIdentifier(), ConditionTypes.ITEM.read(buf), ConditionTypes.ITEM.read(buf), ActionTypes.ITEM.read(buf))
         }
         private val read = JFunction { jsonElement:JsonElement ->
             val json = jsonElement.asJsonObject
-            CyberForgeRecipeFactory(null, SerializableDataTypes.INGREDIENT.read(json["addition"]), ConditionTypes.ITEM.read(json["condition"]), NBT_TRANSFORMER_LIST.read(json["outputData"]))
+            CyberForgeRecipeFactory(null, ConditionTypes.ITEM.read(json["addition"]), ConditionTypes.ITEM.read(json["prerequisites"]), ActionTypes.ITEM.read(json["outputAction"]))
         }
         val DATA_TYPE: SerializableDataType<CyberForgeRecipeFactory> = object: SerializableDataType<CyberForgeRecipeFactory>(CyberForgeRecipeFactory::class.java, send, receive, read) {}
     }

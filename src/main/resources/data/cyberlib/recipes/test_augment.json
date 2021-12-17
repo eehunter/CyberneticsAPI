@@ -1,0 +1,19 @@
+{
+  "type": "cyberlib:cyber_forge",
+  "prerequisites": {
+    "type": "apoli:ingredient",
+    "ingredient": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "addition": {
+    "type": "apoli:ingredient",
+    "ingredient": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "outputAction": {
+    "type": "cyberlib:nbt_merge",
+    "data": "{StoredEnchantments:[],cyberdata:{slots:[\"*\"],powers:[\"cyberlib:debug_invisibility\"]}}"
+  }
+}

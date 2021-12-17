@@ -13,19 +13,26 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import net.minecraft.util.registry.Registry
 
+typealias MCPair<A, B> = net.minecraft.util.Pair<A, B>
+
 class CyberForgeRecipe(
     private val _id: Identifier,
-    val addition: Ingredient,
+    val addition: ApoliCondition<ItemStack>,
     val condition: ApoliCondition<ItemStack>,
-    val outputData: List<NbtTransformer>
+    val outputData: ItemAction
 ) : Recipe<Inventory> {
     override fun matches(inv: Inventory, world: World): Boolean = addition.test(inv.getStack(1)) && condition.test(inv.getStack(0))
 
-    override fun craft(inv: Inventory): ItemStack {
+    @Suppress("DEPRECATION")
+    fun craft(inventory: Inventory, world: World) = craft(WorldInventoryWrapper(inventory, world))
+
+    @Deprecated("Use craft(inventory: Inventory, world: World). If craft(inventory: Inventory) is used, inventory must be an instance of WorldInventoryWrapper")
+    override fun craft(inventory: Inventory): ItemStack {
+        assert(inventory is WorldInventoryWrapper)
+        val inv = inventory as WorldInventoryWrapper
         val otpt = inv.getStack(0).copy()
         otpt.count = 1
-        val dat =otpt.getOrCreateSubNbt("cyberdata")
-        outputData.forEach{it(dat)}
+        outputData.accept(MCPair(inv.world, otpt))
         return otpt
     }
 

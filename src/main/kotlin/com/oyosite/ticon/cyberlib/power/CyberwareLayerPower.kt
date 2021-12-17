@@ -23,7 +23,7 @@ import java.util.function.BiFunction
 class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: List<String>, val slotPos: List<Pair<Int, Int>>) : Power(type, entity), Inventory {
     private val items = Array<ItemStack>(slots.size){ItemStack.EMPTY}
 
-    override fun getMaxCountPerStack(): Int = 0
+    override fun getMaxCountPerStack(): Int = 1
 
     override fun clear() { for (i in items.indices) items[i] = ItemStack.EMPTY }
 

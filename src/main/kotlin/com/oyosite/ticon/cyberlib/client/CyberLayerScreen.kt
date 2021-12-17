@@ -22,7 +22,7 @@ class CyberLayerScreen(private val handler: CyberLayerScreenHandler, inv: Player
         handler.power.slotPos.forEach { drawTexture(matrices, x+it.first-1, y+it.second-1, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
     }
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
         drawMouseoverTooltip(matrices, mouseX, mouseY)

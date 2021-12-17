@@ -1,6 +1,7 @@
 package com.oyosite.ticon.cyberlib.block
 
 import com.oyosite.ticon.cyberlib.CyberLib.MODID
+import com.oyosite.ticon.cyberlib.client.CyberForgeScreenHandler
 import com.oyosite.ticon.cyberlib.client.CyberLayerScreenHandler
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -25,12 +26,16 @@ import net.minecraft.world.World
 class DebugBlock : CyberBlock("debug_block", FabricBlockSettings.of(Material.METAL, MapColor.MAGENTA)){
     private object SHF : ExtendedScreenHandlerFactory{
         override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler = CyberLayerScreenHandler(syncId, inv, Identifier(MODID, "generic_cyber_layer_power"))
-        override fun getDisplayName(): Text = TranslatableText("menu.cyber_layer_menu.name")
+        override fun getDisplayName(): Text = TranslatableText("menu.cyber_layer.name")
         override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) { buf.writeIdentifier(Identifier(MODID, "generic_cyber_layer_power")) }
+    }
+    private object CFSHF : NamedScreenHandlerFactory {
+        override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler = CyberForgeScreenHandler(syncId, inv)
+        override fun getDisplayName(): Text = TranslatableText("menu.cyber_forge.name")
     }
     override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos): NamedScreenHandlerFactory = SHF
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
-        val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
+        val screenHandlerFactory = if(player.isSneaking) CFSHF else SHF
         player.openHandledScreen(screenHandlerFactory)
         return ActionResult.SUCCESS
     }
