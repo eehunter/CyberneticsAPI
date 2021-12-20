@@ -2,10 +2,10 @@ package com.oyosite.ticon.cyberlib.data
 
 import com.google.gson.JsonObject
 import com.oyosite.ticon.cyberlib.CyberLib.MODID
+import net.minecraft.block.pattern.CachedBlockPosition
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.RecipeType
@@ -19,7 +19,8 @@ class CyberForgeRecipe(
     private val _id: Identifier,
     val addition: ApoliCondition<ItemStack>,
     val condition: ApoliCondition<ItemStack>,
-    val outputData: ItemAction
+    val outputData: ItemAction,
+    val blockPredicate: ApoliCondition<CachedBlockPosition>
 ) : Recipe<Inventory> {
     override fun matches(inv: Inventory, world: World): Boolean = addition.test(inv.getStack(1)) && condition.test(inv.getStack(0))
 

@@ -19,35 +19,17 @@ class CyberLayerScreenHandler(syncId: Int, inv: PlayerInventory, id: Identifier)
     val power = PowerHolderComponent.KEY.get(inv.player).getPower(PowerTypeRegistry.get(id)) as CyberwareLayerPower
     init {
         power.slots.map{cyberSlot(power,it)}.forEach(::addSlot)
-        var l: Int
-        var m = 0
-        while (m < 3) {
-            l = 0
-            while (l < 9) addSlot(Slot(inv, l + m * 9 + 9, 8 + (l++) * 18, 84 + m * 18))
-            ++m
-        }
-        m = 0
-        while (m < 9)addSlot(Slot(inv, m, 8 + (m++) * 18, 142))
-
+        var l: Int; var m = 0
+        while (m < 3) { l = 0; while (l < 9) addSlot(Slot(inv, l + m * 9 + 9, 8 + (l++) * 18, 84 + m * 18)); ++m }
+        m = 0; while (m < 9)addSlot(Slot(inv, m, 8 + (m++) * 18, 142))
     }
 
-    override fun canInsertIntoSlot(stack: ItemStack, slot: Slot): Boolean = slot.canInsert(stack)//(slot.inventory != power) || (stack.getSubNbt("cyberdata")?.getList("slots", NbtElement.STRING_TYPE.toInt())?.map { (it as NbtString).asString()!! }?.any { it == "*" } ?:false)
+    override fun canInsertIntoSlot(stack: ItemStack, slot: Slot): Boolean = slot.canInsert(stack)
     override fun canInsertIntoSlot(slot: Slot): Boolean = true
     override fun canUse(player: PlayerEntity?): Boolean = power.canPlayerUse(player)
     private class CyberSlot(power:CyberwareLayerPower, slot: Int, x: Int, y: Int): Slot(power,slot,x,y){
         val power: CyberwareLayerPower get() = inventory as CyberwareLayerPower
         override fun canInsert(stack: ItemStack): Boolean = stack.getSubNbt("cyberdata")?.getList("slots", NbtElement.STRING_TYPE.toInt())?.map { (it as NbtString).asString()!! }?.any { it == "*" || it == power.slots[index] } ?:false
-            /*val dat = stack.getSubNbt("cyberdata")
-            if (dat != null) {
-                val slots = dat.getList("slots", NbtElement.STRING_TYPE.toInt())
-                if(slots!=null){
-                    val strings = slots.map{(it as NbtString).asString()!!}
-                    println(strings.contains("*"))
-                    return strings.contains("*")||strings.contains(power.slots[index])//strings.any{ (it == "*") || (it == power.slots[index]) }
-                } else println("slots not found")
-            } else println("cyberdata not found")
-            return false
-        }*/
     }
     private fun cyberSlot(power:CyberwareLayerPower, slot: String) : Slot{
         val i = power.slots.indexOf(slot)
