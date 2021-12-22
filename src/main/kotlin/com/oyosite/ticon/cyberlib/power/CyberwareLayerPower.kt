@@ -62,7 +62,7 @@ class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: L
     companion object{
         private val SerializableData.Instance.slotData get() = get("slot_data") as List<CyberSlotData>
         fun createFactory() = PowerFactory(Identifier(MODID, "cyberware_layer"),
-            SDKotlin()("slot_data", CYBER_SLOT_DATA_LIST)
+            SDKotlin("slot_data", CYBER_SLOT_DATA_LIST)
         ) { data -> BiFunction{ type, entity -> CyberwareLayerPower(type, entity, data.slotData.ids(), data.slotData.pos()) } }
     }
 }

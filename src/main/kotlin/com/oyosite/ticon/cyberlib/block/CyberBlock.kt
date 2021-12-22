@@ -1,5 +1,3 @@
-@file:Suppress("LeakingThis")
-
 package com.oyosite.ticon.cyberlib.block
 
 import com.oyosite.ticon.cyberlib.CyberLib.MODID

@@ -23,7 +23,6 @@ class CyberLayerScreenHandler(syncId: Int, inv: PlayerInventory, id: Identifier)
         while (m < 3) { l = 0; while (l < 9) addSlot(Slot(inv, l + m * 9 + 9, 8 + (l++) * 18, 84 + m * 18)); ++m }
         m = 0; while (m < 9)addSlot(Slot(inv, m, 8 + (m++) * 18, 142))
     }
-
     override fun canInsertIntoSlot(stack: ItemStack, slot: Slot): Boolean = slot.canInsert(stack)
     override fun canInsertIntoSlot(slot: Slot): Boolean = true
     override fun canUse(player: PlayerEntity?): Boolean = power.canPlayerUse(player)
@@ -36,14 +35,13 @@ class CyberLayerScreenHandler(syncId: Int, inv: PlayerInventory, id: Identifier)
         val p = power.slotPos[i]
         return CyberSlot(power, i, p.first, p.second)
     }
-
     override fun transferSlot(player: PlayerEntity?, index: Int): ItemStack {
         val slot = slots[index]
         val oldStack = slot.stack ?: return ItemStack.EMPTY
         val stack = oldStack.copy()
         if (index < power.size()){ if(!insertItem(oldStack, power.size(), slots.size, true)) return ItemStack.EMPTY }
         else if (!insertItem(oldStack, 0, power.size(), false)) return ItemStack.EMPTY
-        if (oldStack.isEmpty) slot.setStack(ItemStack.EMPTY)
+        if (oldStack.isEmpty) slot.stack = ItemStack.EMPTY
         else slot.markDirty()
         return stack
     }

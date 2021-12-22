@@ -1,8 +1,6 @@
 package com.oyosite.ticon.cyberlib.data
 
-import com.google.gson.JsonArray
 import io.github.apace100.calio.data.SerializableDataType
-import net.minecraft.network.PacketByteBuf
 
 class CyberSlotData(val name: String, val x: Int, val y: Int) {
 

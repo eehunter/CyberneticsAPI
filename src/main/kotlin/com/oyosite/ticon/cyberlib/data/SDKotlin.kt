@@ -3,10 +3,12 @@ package com.oyosite.ticon.cyberlib.data
 import io.github.apace100.calio.data.SerializableData
 import io.github.apace100.calio.data.SerializableDataType
 
+object SDKotlin{
+    operator fun invoke(name: String?, type: SerializableDataType<*>?): SD = SD()(name, type)
+    operator fun <T> invoke(name: String?, type: SerializableDataType<T>?, defaultValue: T): SD = SD()(name, type, defaultValue)
 
-
-
-class SDKotlin: SerializableData() {
-    operator fun invoke(name: String?, type: SerializableDataType<*>?): SDKotlin { add(name,type); return this }
-    operator fun <T> invoke(name: String?, type: SerializableDataType<T>?, defaultValue: T): SDKotlin { add(name,type,defaultValue); return this }
+    class SD: SerializableData(){
+        operator fun invoke(name: String?, type: SerializableDataType<*>?): SD { add(name,type); return this }
+        operator fun <T> invoke(name: String?, type: SerializableDataType<T>?, defaultValue: T): SD { add(name,type,defaultValue); return this }
+    }
 }

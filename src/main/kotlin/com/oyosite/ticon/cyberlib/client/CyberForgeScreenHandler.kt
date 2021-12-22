@@ -27,7 +27,6 @@ class CyberForgeScreenHandler(syncId: Int, inv: PlayerInventory, private val cac
         input.getStack(0).count--
         input.getStack(1).count--
     }
-
     override fun updateResult() {
         val recipes = world.recipeManager.getAllMatches(CyberForgeRecipe.TYPE, input, world)
         if (recipes.isEmpty()) output.setStack(0, ItemStack.EMPTY)

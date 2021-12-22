@@ -2,6 +2,7 @@ package com.oyosite.ticon.cyberlib.data
 
 import com.google.gson.JsonObject
 import com.oyosite.ticon.cyberlib.CyberLib.MODID
+import com.oyosite.ticon.cyberlib.util.*
 import net.minecraft.block.pattern.CachedBlockPosition
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
@@ -13,7 +14,6 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import net.minecraft.util.registry.Registry
 
-typealias MCPair<A, B> = net.minecraft.util.Pair<A, B>
 
 class CyberForgeRecipe(
     private val _id: Identifier,

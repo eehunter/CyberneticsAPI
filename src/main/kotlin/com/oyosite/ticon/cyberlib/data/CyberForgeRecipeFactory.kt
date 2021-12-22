@@ -2,23 +2,17 @@ package com.oyosite.ticon.cyberlib.data
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import io.github.apace100.apoli.power.factory.action.ActionFactory
+import com.oyosite.ticon.cyberlib.util.ApoliCondition
+import com.oyosite.ticon.cyberlib.util.ItemAction
+import com.oyosite.ticon.cyberlib.util.JFunction
 import io.github.apace100.apoli.power.factory.action.ActionTypes
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory
 import io.github.apace100.apoli.power.factory.condition.ConditionTypes
 import io.github.apace100.calio.data.SerializableDataType
 import net.minecraft.block.pattern.CachedBlockPosition
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
-import net.minecraft.util.Pair
-import net.minecraft.world.World
 import java.util.function.BiConsumer
-
-typealias JFunction<T, R> = java.util.function.Function<T, R>
-typealias ApoliCondition<T> = ConditionFactory<T>.Instance
-typealias ApoliAction<T> = ActionFactory<T>.Instance
-typealias ItemAction = ApoliAction<Pair<World, ItemStack>>
 
 class CyberForgeRecipeFactory(val id: Identifier?, val addition: ApoliCondition<ItemStack>, val condition: ApoliCondition<ItemStack>, val outputData: ItemAction, val blockCondition: ApoliCondition<CachedBlockPosition>) : (Identifier) -> CyberForgeRecipe {
     constructor(recipe: CyberForgeRecipe) : this(recipe.id, recipe.addition, recipe.condition, recipe.outputData, recipe.blockPredicate)
