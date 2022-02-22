@@ -3,6 +3,7 @@ package com.oyosite.ticon.cyberlib.power
 import com.oyosite.ticon.cyberlib.CyberLib.MODID
 import com.oyosite.ticon.cyberlib.data.CLSerializableDataTypes.CYBER_SLOT_DATA_LIST
 import com.oyosite.ticon.cyberlib.data.CyberSlotData
+import com.oyosite.ticon.cyberlib.data.CyberSlotData.Companion.icons
 import com.oyosite.ticon.cyberlib.data.CyberSlotData.Companion.ids
 import com.oyosite.ticon.cyberlib.data.CyberSlotData.Companion.pos
 import com.oyosite.ticon.cyberlib.data.SDKotlin
@@ -20,7 +21,7 @@ import net.minecraft.util.Identifier
 import java.util.function.BiFunction
 
 
-class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: List<String>, val slotPos: List<Pair<Int, Int>>) : Power(type, entity), Inventory {
+class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: List<String>, val slotPos: List<Pair<Int, Int>>, val icons: Map<Int, Identifier>) : Power(type, entity), Inventory {
     private val items = Array<ItemStack>(slots.size){ItemStack.EMPTY}
 
     override fun getMaxCountPerStack(): Int = 1
@@ -63,6 +64,6 @@ class CyberwareLayerPower(type: PowerType<*>, entity: LivingEntity, val slots: L
         private val SerializableData.Instance.slotData get() = get("slot_data") as List<CyberSlotData>
         fun createFactory() = PowerFactory(Identifier(MODID, "cyberware_layer"),
             SDKotlin("slot_data", CYBER_SLOT_DATA_LIST)
-        ) { data -> BiFunction{ type, entity -> CyberwareLayerPower(type, entity, data.slotData.ids(), data.slotData.pos()) } }
+        ) { data -> BiFunction{ type, entity -> CyberwareLayerPower(type, entity, data.slotData.ids(), data.slotData.pos(), data.slotData.icons()) } }
     }
 }

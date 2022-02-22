@@ -10,7 +10,10 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class CyberLayerScreen(handler: CyberLayerScreenHandler, inv: PlayerInventory, title: Text) : HandledScreen<CyberLayerScreenHandler>(handler, inv, title) {
-    val TEXTURE = Identifier(MODID, "textures/gui/container/cyberware.png")
+    companion object {
+        private val TEXTURE = Identifier(MODID, "textures/gui/container/cyberware.png")
+        private val BASE_SLOT = Identifier(MODID, "textures/gui/container/generic_slot.png")
+    }
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
@@ -18,7 +21,12 @@ class CyberLayerScreen(handler: CyberLayerScreenHandler, inv: PlayerInventory, t
         val x = (width - backgroundWidth) / 2
         val y = (height - backgroundHeight) / 2
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
-        handler.power.slotPos.forEach { drawTexture(matrices, x+it.first-1, y+it.second-1, backgroundWidth/2-9, backgroundHeight/2, 18, 18) }
+        with(handler.power) {
+            slotPos.forEachIndexed { i, it ->
+                RenderSystem.setShaderTexture(0, icons.getOrDefault(i, BASE_SLOT))
+                drawTexture(matrices, x + it.first - 5, y + it.second - 5, 0, 0, 26, 26)
+            }
+        }
     }
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         renderBackground(matrices)

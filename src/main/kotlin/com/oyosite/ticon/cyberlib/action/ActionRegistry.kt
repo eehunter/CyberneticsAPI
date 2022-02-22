@@ -4,7 +4,10 @@ package com.oyosite.ticon.cyberlib.action
 
 import com.oyosite.ticon.cyberlib.CyberLib.MODID
 import com.oyosite.ticon.cyberlib.data.SDKotlin
+import com.oyosite.ticon.cyberlib.util.BOOLEAN_DATA
 import com.oyosite.ticon.cyberlib.util.MCPair
+import com.oyosite.ticon.cyberlib.util.NBT_DATA
+import com.oyosite.ticon.cyberlib.util.STRING_DATA
 import io.github.apace100.apoli.power.factory.action.ActionFactory
 import io.github.apace100.apoli.registry.ApoliRegistries.ITEM_ACTION
 import io.github.apace100.calio.data.SerializableData
@@ -19,8 +22,8 @@ import java.util.function.BiConsumer
 
 object ActionRegistry {
     fun register(){
-        register(ITEM_ACTION, "$MODID:nbt_merge", SDKotlin("data", SerializableDataTypes.NBT)) { data, ws -> ws.right.orCreateNbt.copyFrom(data["data"]) }
-        register(ITEM_ACTION, "$MODID:nbt_edit", SDKotlin("data", SerializableDataTypes.NBT)("path", SerializableDataTypes.STRING)("create_path", SerializableDataTypes.BOOLEAN, true), ::nbtEdit)
+        register(ITEM_ACTION, "$MODID:nbt_merge", SDKotlin("data", NBT_DATA)) { data, ws -> ws.right.orCreateNbt.copyFrom(data["data"]) }
+        register(ITEM_ACTION, "$MODID:nbt_edit", SDKotlin("data", NBT_DATA)("path", STRING_DATA)("create_path", BOOLEAN_DATA, true), ::nbtEdit)
     }
     // As of writing this comment, this method is entirely untested. Use at your own risk.
     private fun nbtEdit(data: SerializableData.Instance, ws: MCPair<World, ItemStack>){
