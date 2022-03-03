@@ -14,7 +14,7 @@ class CyberSlotData(val name: String, val x: Int, val y: Int, val icon: Identifi
             if(csd.icon!=null) buf.writeIdentifier(csd.icon)
         }, { buf -> CyberSlotData(buf.readString(), buf.readInt(), buf.readInt(), if(buf.readBoolean()) buf.readIdentifier() else null) }) { jsonElement ->
             val json = jsonElement.asJsonArray
-            CyberSlotData(json[0].asString, json[1].asInt, json[2].asInt, if(json.size()>=3)Identifier(json[3].asString)else null)
+            CyberSlotData(json[0].asString, json[1].asInt, json[2].asInt, if(json.size()>3)Identifier(json[3].asString)else null)
         }
         fun List<CyberSlotData>.ids() = map {it.name}
         fun List<CyberSlotData>.pos() = map {Pair(it.x, it.y)}

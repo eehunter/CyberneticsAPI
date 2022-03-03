@@ -24,7 +24,7 @@ class CyberLayerScreen(handler: CyberLayerScreenHandler, inv: PlayerInventory, t
         with(handler.power) {
             slotPos.forEachIndexed { i, it ->
                 RenderSystem.setShaderTexture(0, icons.getOrDefault(i, BASE_SLOT))
-                drawTexture(matrices, x + it.first - 5, y + it.second - 5, 0, 0, 26, 26)
+                drawTexture(matrices, x + it.first - 5, y + it.second - 5, 0F, 0F, 26, 26, 26, 26)
             }
         }
     }
