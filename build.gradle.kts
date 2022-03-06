@@ -18,7 +18,7 @@ repositories {
     maven { setUrl("https://maven.shedaniel.me/") }
     maven { setUrl("https://jitpack.io") }
     maven { setUrl("https://maven.terraformersmc.com/") }
-    maven { setUrl("https://dl.bintray.com/adriantodt/maven"); name = "AdrianTodt's Maven" }
+    //maven { setUrl("https://dl.bintray.com/adriantodt/maven"); name = "AdrianTodt's Maven" }
     maven { setUrl("https://maven.jamieswhiteshirt.com/libs-release/") }
 }
 
