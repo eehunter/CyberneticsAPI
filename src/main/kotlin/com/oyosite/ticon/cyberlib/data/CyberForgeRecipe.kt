@@ -20,7 +20,8 @@ class CyberForgeRecipe(
     val addition: ApoliCondition<ItemStack>,
     val condition: ApoliCondition<ItemStack>,
     val outputData: ItemAction,
-    val blockPredicate: ApoliCondition<CachedBlockPosition>
+    val blockPredicate: ApoliCondition<CachedBlockPosition>,
+    val outputStackTemplate: ItemStack?
 ) : Recipe<Inventory> {
     override fun matches(inv: Inventory, world: World): Boolean = addition.test(inv.getStack(1)) && condition.test(inv.getStack(0))
 
