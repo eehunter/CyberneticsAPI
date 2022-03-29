@@ -1,5 +1,6 @@
 package com.oyosite.ticon.cyberlib.power
 
+import com.oyosite.ticon.cyberlib.util.cyberwareUpgrades
 import io.github.apace100.apoli.component.PowerHolderComponent
 import io.github.apace100.apoli.power.Power
 import io.github.apace100.apoli.power.PowerType
@@ -12,10 +13,8 @@ import net.minecraft.nbt.NbtElement
 import net.minecraft.util.Identifier
 
 fun getPowersForItem(item: ItemStack, slot: Identifier, entity: LivingEntity): List<PowerType<*>>{
-    val nbt = item.getSubNbt("cyberdata") ?: return listOf()
-    if (!nbt.contains("powers")) return listOf()
-    val p = nbt.getList("powers", NbtElement.STRING_TYPE.toInt())
-    val powers = List(p.size) { Identifier(p.getString(it)) }
+    val powers = mutableListOf<Identifier>()
+    item.cyberwareUpgrades.forEach { powers.addAll(it.powers) }
     return powers.filter { PowerTypeRegistry.contains(it) }.map { PowerTypeRegistry.get(it) }
 }
 fun canAddPower(item: ItemStack, slot: Identifier, entity: LivingEntity): Boolean = !item.isEmpty && getPowersForItem(item, slot, entity).isNotEmpty()

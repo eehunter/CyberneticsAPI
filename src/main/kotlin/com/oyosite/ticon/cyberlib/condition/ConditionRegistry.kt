@@ -6,6 +6,8 @@ import com.oyosite.ticon.cyberlib.data.CyberwareUpgradeLevel
 import com.oyosite.ticon.cyberlib.data.SDKotlin
 import com.oyosite.ticon.cyberlib.registry.CyberlibRegistries
 import com.oyosite.ticon.cyberlib.util.cyberwareUpgrades
+import com.oyosite.ticon.cyberlib.util.maxUpgradePoints
+import com.oyosite.ticon.cyberlib.util.upgradePoints
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory
 import io.github.apace100.apoli.registry.ApoliRegistries.ITEM_CONDITION
 import io.github.apace100.calio.data.SerializableData
@@ -19,6 +21,11 @@ import java.util.function.BiFunction
 object ConditionRegistry {
     fun register(){
         register(ITEM_CONDITION, "$MODID:cyberware_upgrade", SDKotlin("id", IDENTIFIER)("level", INT, 1)("allowHigherLevels", BOOLEAN, false), ConditionRegistry::upgradePredicate)
+        register(ITEM_CONDITION, "$MODID:cyberware_upgrade_points", SDKotlin("min_up_available", DOUBLE, 2.0), ::upgradePointPredicate)
+    }
+    private fun upgradePointPredicate(sdi: SerializableData.Instance, stack: ItemStack): Boolean{
+        val pts = stack.maxUpgradePoints-stack.upgradePoints
+        return pts >= sdi.getDouble("min_up_available")
     }
     private fun upgradePredicate(sdi: SerializableData.Instance, stack: ItemStack): Boolean{
         val upgrade = CyberlibRegistries.UPGRADE[sdi.getId("id")]?:return false

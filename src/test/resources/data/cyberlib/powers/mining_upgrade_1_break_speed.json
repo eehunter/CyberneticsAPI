@@ -1,0 +1,17 @@
+{
+  "type": "apoli:modify_break_speed",
+  "block_condition": {
+    "type": "apoli:in_tag",
+    "tag": "minecraft:needs_stone_tool"
+  },
+  "condition": {
+    "type": "apoli:using_effective_tool",
+    "inverted": true
+  },
+  "modifier": {
+    "name": "Mining upgrade stone break speed bonus",
+    "value": 0.06,
+    "operation": "addition"
+  },
+  "hidden": true
+}

@@ -9,11 +9,11 @@
   "addition": {
     "type": "apoli:ingredient",
     "ingredient": {
-      "item": "minecraft:gold_ingot"
+      "item": "minecraft:stone_pickaxe"
     }
   },
   "outputAction": {
-    "type": "cyberlib:nbt_merge",
-    "data": "{StoredEnchantments:[],cyberdata:{slots:[\"*\"],powers:[\"cyberlib:debug_invisibility\"]}}"
+    "type": "cyberlib:add_upgrade",
+    "id": "cyberlib:mining_upgrade"
   }
 }
