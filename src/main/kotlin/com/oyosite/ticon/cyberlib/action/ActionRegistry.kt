@@ -12,6 +12,8 @@ import io.github.apace100.apoli.power.factory.action.ActionFactory
 import io.github.apace100.apoli.registry.ApoliRegistries.ITEM_ACTION
 import io.github.apace100.calio.data.SerializableData
 import io.github.apace100.calio.data.SerializableDataTypes
+import io.github.apace100.calio.data.SerializableDataTypes.IDENTIFIER
+import io.github.apace100.calio.data.SerializableDataTypes.INT
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
@@ -24,6 +26,7 @@ object ActionRegistry {
     fun register(){
         register(ITEM_ACTION, "$MODID:nbt_merge", SDKotlin("data", NBT_DATA)) { data, ws -> ws.right.orCreateNbt.copyFrom(data["data"]) }
         register(ITEM_ACTION, "$MODID:nbt_edit", SDKotlin("data", NBT_DATA)("path", STRING_DATA)("create_path", BOOLEAN_DATA, true), ::nbtEdit)
+        register(ITEM_ACTION, "$MODID:add_upgrade", SDKotlin("id", IDENTIFIER)("level", INT, 1), ::addUpgrade)
     }
     // As of writing this comment, this method is entirely untested. Use at your own risk.
     private fun nbtEdit(data: SerializableData.Instance, ws: MCPair<World, ItemStack>){
@@ -37,6 +40,13 @@ object ActionRegistry {
             else return
         }
         nbt.copyFrom(data.get("data"))
+    }
+
+    private fun addUpgrade(data: SerializableData.Instance, ws: MCPair<World, ItemStack>){
+        val cyberdata = ws.right.getOrCreateSubNbt("cyberdata")
+        val upgrades = cyberdata.getCompound("upgrades")
+        upgrades.putInt(data.getId("id").toString(), data.getInt("level"))
+        cyberdata.put("upgrades",upgrades)
     }
 
     private fun <T> register(registry: Registry<ActionFactory<T>>, id: String, sd: SerializableData, effect: (SerializableData.Instance, T) -> Unit){

@@ -4,13 +4,17 @@ import com.oyosite.ticon.cyberlib.action.ActionRegistry
 import com.oyosite.ticon.cyberlib.block.Registry.registerBlocks
 import com.oyosite.ticon.cyberlib.client.CyberForgeScreenHandler
 import com.oyosite.ticon.cyberlib.client.CyberLayerScreenHandler
+import com.oyosite.ticon.cyberlib.condition.ConditionRegistry
 import com.oyosite.ticon.cyberlib.data.CyberForgeRecipe
+import com.oyosite.ticon.cyberlib.data.UpgradeResourceReloadListener
 import com.oyosite.ticon.cyberlib.item.Registry.registerItems
 import com.oyosite.ticon.cyberlib.power.CyberwareLayerPower
 import io.github.apace100.apoli.power.factory.PowerFactory
 import io.github.apace100.apoli.registry.ApoliRegistries
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
+import net.minecraft.resource.ResourceType
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -25,6 +29,8 @@ object CyberLib : ModInitializer {
         registerPowerFactory(CyberwareLayerPower.createFactory())
         CyberForgeRecipe.SERIALIZER
         ActionRegistry.register()
+        ConditionRegistry.register()
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(UpgradeResourceReloadListener)
     }
     private fun registerPowerFactory(factory: PowerFactory<*>): PowerFactory<*> = Registry.register(ApoliRegistries.POWER_FACTORY, factory.serializerId, factory)
 }
