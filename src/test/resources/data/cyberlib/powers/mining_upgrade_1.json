@@ -2,7 +2,8 @@
   "type": "apoli:modify_harvest",
   "allow": true,
   "block_condition": {
-    "type": "apoli:in_tag",
-    "tag": "minecraft:needs_stone_tool"
+    "type": "cyberlib:mining_level",
+    "comparison": "<=",
+    "compare_to": 1.0
   }
 }

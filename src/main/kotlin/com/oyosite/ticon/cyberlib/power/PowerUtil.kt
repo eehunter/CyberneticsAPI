@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier
 fun getPowersForItem(item: ItemStack, slot: Identifier, entity: LivingEntity): List<PowerType<*>>{
     val powers = mutableListOf<Identifier>()
     item.cyberwareUpgrades.forEach { powers.addAll(it.powers) }
+    //println(powers.filter { PowerTypeRegistry.contains(it) })
     return powers.filter { PowerTypeRegistry.contains(it) }.map { PowerTypeRegistry.get(it) }
 }
 fun canAddPower(item: ItemStack, slot: Identifier, entity: LivingEntity): Boolean = !item.isEmpty && getPowersForItem(item, slot, entity).isNotEmpty()

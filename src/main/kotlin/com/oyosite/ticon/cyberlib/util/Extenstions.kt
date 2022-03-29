@@ -15,7 +15,14 @@ val ItemStack.cyberwareUpgrades: List<CyberwareUpgradeLevel> get() {
     val cyberdata = getSubNbt("cyberdata")?:return listOf()
     val upgradesNBT = cyberdata.getCompound("upgrades")?:return listOf()
     val upgrades = mutableListOf<CyberwareUpgradeLevel>()
-    for(upg in upgradesNBT.keys) upgrades.add((CyberlibRegistries.UPGRADE[Identifier(upg)]?:continue).getOrNull(upgradesNBT.getInt(upg))?:continue)
+    //println(upgradesNBT)
+    for(upg in upgradesNBT.keys) {
+        //println(CyberlibRegistries.UPGRADE[Identifier(upg)])
+        upgrades.add(
+            (CyberlibRegistries.UPGRADE[Identifier(upg)] ?: continue).getOrNull(upgradesNBT.getInt(upg) - 1) ?: continue
+        )
+    }
+    //println(upgrades)
     return upgrades
 }
 val ItemStack.upgradePoints: Double get() = cyberwareUpgrades.fold(0.0){r,t->r+t.up}

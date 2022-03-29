@@ -21,10 +21,13 @@ object UpgradeResourceReloadListener: SimpleSynchronousResourceReloadListener {
             try{
                 val stream = manager.getResource(it).inputStream
                 val reader = BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8))
-                val builder = StringBuilder()
-                var str = ""; while (reader.readLine().also { s -> str = s?:"" } != null) builder.append(str)
-                val json: JsonObject = JsonHelper.deserialize(builder.toString())
-                Registry.register(CyberlibRegistries.UPGRADE, it, CLSerializableDataTypes.CYBERWARE_UPGRADE_LEVELS.read(json["levels"]))
+                val str = reader.lines().toList().joinToString("\n")
+                //val builder = StringBuilder()
+                //var str = ""; while (reader.readLine().also { s -> str = s?:"" } != null) builder.append(str)
+                //println(str)
+                val json: JsonObject = JsonHelper.deserialize(str)
+                Registry.register(CyberlibRegistries.UPGRADE, Identifier(it.namespace, it.path.slice(19..it.path.length-6)), CLSerializableDataTypes.CYBERWARE_UPGRADE_LEVELS.read(json["levels"]))
+                //println(CyberlibRegistries.UPGRADE.ids)
             }catch(e: Exception) { e.printStackTrace() }
         }
     }
