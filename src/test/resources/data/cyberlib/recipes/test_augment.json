@@ -9,7 +9,7 @@
   "addition": {
     "type": "apoli:ingredient",
     "ingredient": {
-      "item": "minecraft:stone_pickaxe"
+      "item": "minecraft:iron_ingot"
     }
   },
   "outputAction": {
