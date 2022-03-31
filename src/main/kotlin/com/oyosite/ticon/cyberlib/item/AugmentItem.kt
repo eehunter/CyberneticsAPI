@@ -18,7 +18,7 @@ open class AugmentItem(settings: FabricItemSettings) : Item(settings) {
         if(upgrades.isEmpty())tooltip.add(TranslatableText("tooltip.no_upgrades"))
         else {
             tooltip.add(TranslatableText("tooltip.upgrades"))
-            upgrades.forEach { tooltip.add(LiteralText("- ").append(TranslatableText(it.translationKey))) }
+            upgrades.forEach { if(it.translationKey.isNotEmpty())tooltip.add(LiteralText("- ").append(TranslatableText(it.translationKey))) }
         }
     }
 }
