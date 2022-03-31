@@ -26,11 +26,11 @@ import java.util.function.BiFunction
 object ConditionRegistry {
     fun register(){
         register(ITEM_CONDITION, "$MODID:cyberware_upgrade", SDKotlin("id", IDENTIFIER)("level", INT, 0)("comparison", COMPARISON, Comparison.EQUAL), ConditionRegistry::upgradePredicate)
-        register(ITEM_CONDITION, "$MODID:cyberware_upgrade_points", SDKotlin("comparison", COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)("compare_to", DOUBLE)){data, p -> data.get<Comparison>("comparison").compare(p.upgradePoints, data.getDouble("compare_to"))}
+        register(ITEM_CONDITION, "$MODID:cyberware_upgrade_points", SDKotlin("comparison", COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)("compare_to", DOUBLE)){data, p -> data.get<Comparison>("comparison").compare(p.maxUpgradePoints-p.upgradePoints, data.getDouble("compare_to"))}
         register(BLOCK_CONDITION, "$MODID:mining_level", SDKotlin("comparison", COMPARISON)("compare_to", DOUBLE)){data, block -> data.get<Comparison>("comparison").compare(MiningLevelManager.getRequiredMiningLevel(block.blockState)+0.0, data.getDouble("compare_to"))}
     }
     private fun upgradePredicate(sdi: SerializableData.Instance, stack: ItemStack): Boolean{
-        val upgrade = CyberlibRegistries.UPGRADE[sdi.getId("id")]?:return false
+        CyberlibRegistries.UPGRADE[sdi.getId("id")]?:return false
         val cyberdata = stack.getSubNbt("cyberdata")?:return false
         val upgradeLevel = cyberdata.getCompound("upgrades").getInt(sdi.getId("id").toString())
         return sdi.get<Comparison>("comparison").compare(upgradeLevel.toDouble(), sdi.getInt("level").toDouble())
