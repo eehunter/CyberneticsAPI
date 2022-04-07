@@ -1,0 +1,7 @@
+{
+  "menu.cyberlib.cyberforge.name": "Debug Cyberforge",
+  "menu.cyberlib.cyber_layer.name": "Debug Cyberware Layer Interface",
+
+  "tooltip.cyberlib.no_upgrades": "No Upgrades Installed",
+  "tooltip.cyberlib.upgrades": "Upgrades:"
+}

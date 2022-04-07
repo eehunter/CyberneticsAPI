@@ -10,14 +10,15 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.world.World
 
+@Suppress("unused")
 open class AugmentItem(settings: FabricItemSettings) : Item(settings) {
     constructor(settings: FabricItemSettings.()->FabricItemSettings = {this}) : this(FabricItemSettings().settings())
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         val upgrades = stack.cyberwareUpgrades
-        if(upgrades.isEmpty())tooltip.add(TranslatableText("tooltip.no_upgrades"))
+        if(upgrades.isEmpty())tooltip.add(TranslatableText("tooltip.cyberlib.no_upgrades"))
         else {
-            tooltip.add(TranslatableText("tooltip.upgrades"))
+            tooltip.add(TranslatableText("tooltip.cyberlib.upgrades"))
             upgrades.forEach { if(it.translationKey.isNotEmpty())tooltip.add(LiteralText("- ").append(TranslatableText(it.translationKey))) }
         }
     }
