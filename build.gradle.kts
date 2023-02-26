@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.8.10"
     id("fabric-loom")
     `maven-publish`
     java
@@ -63,7 +63,7 @@ tasks {
         // select the repositories you want to publish to
         repositories {
             // uncomment to publish to the local maven
-            // mavenLocal()
+            mavenLocal()
         }
     }
 
