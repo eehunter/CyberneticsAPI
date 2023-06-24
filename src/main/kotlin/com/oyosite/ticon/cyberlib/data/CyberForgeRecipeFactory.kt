@@ -41,6 +41,7 @@ class CyberForgeRecipeFactory(val id: Identifier?, val addition: ApoliCondition<
         }
         private val read = JFunction { jsonElement:JsonElement ->
             val json = jsonElement.asJsonObject
+            println("Reading cyberforge recipe from json")
             CyberForgeRecipeFactory(null, ConditionTypes.ITEM.read(json["addition"]), ConditionTypes.ITEM.read(json["prerequisites"]), ActionTypes.ITEM.read(json["outputAction"]), if(json.has("blockCondition"))ConditionTypes.BLOCK.read(json["blockCondition"])else TAG_CONDITION, if(json.has("new_stack"))SerializableDataTypes.ITEM_STACK.read(json["new_stack"])else null)
         }
         val DATA_TYPE: SerializableDataType<CyberForgeRecipeFactory> = object: SerializableDataType<CyberForgeRecipeFactory>(CyberForgeRecipeFactory::class.java, send, receive, read) {}

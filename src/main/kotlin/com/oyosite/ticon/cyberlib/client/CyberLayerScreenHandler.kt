@@ -35,7 +35,7 @@ class CyberLayerScreenHandler(syncId: Int, inv: PlayerInventory, id: Identifier)
         val p = power.slotPos[i]
         return CyberSlot(power, i, p.first, p.second)
     }
-    override fun transferSlot(player: PlayerEntity?, index: Int): ItemStack {
+    override fun quickMove(player: PlayerEntity?, index: Int): ItemStack {
         val slot = slots[index]
         val oldStack = slot.stack ?: return ItemStack.EMPTY
         val stack = oldStack.copy()

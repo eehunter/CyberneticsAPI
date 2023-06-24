@@ -1,6 +1,5 @@
 package com.oyosite.ticon.cyberlib.block
 
-import com.oyosite.ticon.cyberlib.CyberLib.MODID
 import com.oyosite.ticon.cyberlib.client.CyberForgeScreenHandler
 import com.oyosite.ticon.cyberlib.client.CyberLayerScreenHandler
 import com.oyosite.ticon.cyberlib.power.CyberwareLayerPower
@@ -19,10 +18,8 @@ import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -33,7 +30,7 @@ class DebugBlock : CyberBlock("debug_block", FabricBlockSettings.of(Material.MET
         private fun defaultPowerId(player: PlayerEntity) = PowerTypeRegistry.getId(powers(player)[0].type)
         fun canOpen(player: PlayerEntity) = powers(player).size > 0
         override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler = CyberLayerScreenHandler(syncId, inv, defaultPowerId(inv.player))
-        override fun getDisplayName(): Text = TranslatableText("menu.cyberlib.cyber_layer.name")
+        override fun getDisplayName(): Text = Text.translatable("menu.cyberlib.cyber_layer.name")
         override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) { buf.writeIdentifier(defaultPowerId(player)) }
     }
     private object CFSHF : NamedScreenHandlerFactory {
@@ -42,7 +39,7 @@ class DebugBlock : CyberBlock("debug_block", FabricBlockSettings.of(Material.MET
         operator fun invoke(world: World, pos: BlockPos, forceLoad: Boolean = true) = this(CachedBlockPosition(world, pos, forceLoad))
         operator fun invoke(newPos: CachedBlockPosition): CFSHF{ pos = newPos; return this }
         override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler = CyberForgeScreenHandler(syncId, inv, cachedPos)
-        override fun getDisplayName(): Text = TranslatableText("menu.cyberlib.cyberforge.name")
+        override fun getDisplayName(): Text = Text.translatable("menu.cyberlib.cyberforge.name")
     }
     override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos): NamedScreenHandlerFactory = SHF
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {

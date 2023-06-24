@@ -15,7 +15,7 @@ class CyberLayerScreen(handler: CyberLayerScreenHandler, inv: PlayerInventory, t
         private val BASE_SLOT = Identifier(MODID, "textures/gui/container/generic_slot.png")
     }
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+        RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.setShaderTexture(0, TEXTURE)
         val x = (width - backgroundWidth) / 2

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.22"
     id("fabric-loom")
     `maven-publish`
     java
@@ -30,7 +30,19 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
-    modImplementation("com.github.apace100:apoli:${property("apoli_version")}")
+    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${property("cca_version")}") {
+        exclude("net.fabricmc.fabric-api")
+    }
+    include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${property("cca_version")}")
+
+    modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${property("cca_version")}") {
+        exclude("net.fabricmc.fabric-api")
+    }
+    include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${property("cca_version")}")
+
+    modApi("com.github.apace100:calio:v${property("calio_version")}")
+    include("com.github.apace100:calio:v${property("calio_version")}")
+    modApi("com.github.apace100:apoli:${property("apoli_version")}")
     include("com.github.apace100:apoli:${property("apoli_version")}")
     //modRuntimeOnly("com.github.apace100:origins-fabric:${property("origins_version")}")
 }
@@ -38,6 +50,15 @@ dependencies {
 tasks {
 
     processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        inputs.property("version", project.version)
+        filesMatching("fabric.mod.json") {
+            expand(mutableMapOf("version" to project.version))
+        }
+    }
+
+    processTestResources{
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         inputs.property("version", project.version)
         filesMatching("fabric.mod.json") {
             expand(mutableMapOf("version" to project.version))
@@ -51,6 +72,7 @@ tasks {
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
+                from(getComponents()["java"])
                 artifact(remapJar) {
                     builtBy(remapJar)
                 }
@@ -71,6 +93,12 @@ tasks {
         kotlinOptions.jvmTarget = "17"
     }
 
+    compileJava{
+        targetCompatibility = "17"
+    }
+
+
+
 }
 
 java {
@@ -80,6 +108,17 @@ java {
     withSourcesJar()
 }
 
-
+sourceSets{
+    main{
+        resources{
+            srcDirs("src/test/resources","src/main/resources")
+        }
+    }
+    test{
+        resources{
+            srcDirs("src/test/resources","src/main/resources")
+        }
+    }
+}
 
 // configure the maven publication

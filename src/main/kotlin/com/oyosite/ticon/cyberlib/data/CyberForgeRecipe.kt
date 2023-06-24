@@ -10,9 +10,11 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.RecipeType
+import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registry
 
 
 class CyberForgeRecipe(
@@ -26,10 +28,10 @@ class CyberForgeRecipe(
     override fun matches(inv: Inventory, world: World): Boolean = addition.test(inv.getStack(1)) && condition.test(inv.getStack(0))
 
     @Suppress("DEPRECATION")
-    fun craft(inventory: Inventory, world: World) = craft(WorldInventoryWrapper(inventory, world))
+    fun craft(inventory: Inventory, world: World, registryManager: DynamicRegistryManager = world.registryManager) = craft(WorldInventoryWrapper(inventory, world), registryManager)
 
     @Deprecated("Use craft(inventory: Inventory, world: World). If craft(inventory: Inventory) is used, inventory must be an instance of WorldInventoryWrapper")
-    override fun craft(inventory: Inventory): ItemStack {
+    override fun craft(inventory: Inventory, registryManager: DynamicRegistryManager): ItemStack {
         assert(inventory is WorldInventoryWrapper)
         val inv = inventory as WorldInventoryWrapper
         val otpt = inv.getStack(0).copy()
@@ -37,10 +39,10 @@ class CyberForgeRecipe(
         outputData.accept(MCPair(inv.world, otpt))
         return otpt
     }
-
     override fun fits(width: Int, height: Int): Boolean = width * height >= 2
 
-    override fun getOutput(): ItemStack = ItemStack.EMPTY
+
+    override fun getOutput(registryManager: DynamicRegistryManager): ItemStack = ItemStack.EMPTY
 
     override fun getId(): Identifier = _id
 
@@ -50,7 +52,7 @@ class CyberForgeRecipe(
 
     companion object{
         val TYPE = object : RecipeType<CyberForgeRecipe>{}
-        val SERIALIZER by lazy { Registry.register(Registry.RECIPE_SERIALIZER, Identifier(MODID, "cyber_forge"), object: RecipeSerializer<CyberForgeRecipe> {
+        val SERIALIZER: RecipeSerializer<CyberForgeRecipe> by lazy { Registry.register(Registries.RECIPE_SERIALIZER, Identifier(MODID, "cyber_forge"), object: RecipeSerializer<CyberForgeRecipe> {
             override fun read(id: Identifier, json: JsonObject): CyberForgeRecipe = CyberForgeRecipeFactory.DATA_TYPE.read(json)(id)
             override fun read(id: Identifier, buf: PacketByteBuf): CyberForgeRecipe = CyberForgeRecipeFactory.DATA_TYPE.receive(buf)(id)
             override fun write(buf: PacketByteBuf, recipe: CyberForgeRecipe) = CyberForgeRecipeFactory.DATA_TYPE.send(buf, CyberForgeRecipeFactory(recipe))

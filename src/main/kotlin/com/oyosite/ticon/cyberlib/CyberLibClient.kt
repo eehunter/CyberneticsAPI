@@ -6,11 +6,12 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
+import net.minecraft.client.gui.screen.ingame.HandledScreens
 
 @Environment(EnvType.CLIENT)
 object CyberLibClient : ClientModInitializer{
     override fun onInitializeClient() {
-        ScreenRegistry.register(CyberLib.CYBER_LAYER_SCREEN_HANDLER, ::CyberLayerScreen)
-        ScreenRegistry.register(CyberLib.CYBER_FORGE_SCREEN_HANDLER, ::CyberForgeScreen)
+        HandledScreens.register(CyberLib.CYBER_LAYER_SCREEN_HANDLER, ::CyberLayerScreen)
+        HandledScreens.register(CyberLib.CYBER_FORGE_SCREEN_HANDLER, ::CyberForgeScreen)
     }
 }

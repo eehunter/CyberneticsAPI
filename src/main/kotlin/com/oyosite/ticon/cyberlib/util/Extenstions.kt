@@ -2,6 +2,7 @@ package com.oyosite.ticon.cyberlib.util
 
 import com.oyosite.ticon.cyberlib.data.CyberwareUpgradeLevel
 import com.oyosite.ticon.cyberlib.registry.CyberlibRegistries
+import com.oyosite.ticon.cyberlib.registry.CyberwareUpgradeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtElement
 import net.minecraft.util.Identifier
@@ -19,7 +20,7 @@ val ItemStack.cyberwareUpgrades: List<CyberwareUpgradeLevel> get() {
     for(upg in upgradesNBT.keys) {
         //println(CyberlibRegistries.UPGRADE[Identifier(upg)])
         upgrades.add(
-            (CyberlibRegistries.UPGRADE[Identifier(upg)] ?: continue).getOrNull(upgradesNBT.getInt(upg) - 1) ?: continue
+            (CyberwareUpgradeRegistry[Identifier(upg)] ?: continue).getOrNull(upgradesNBT.getInt(upg) - 1) ?: continue
         )
     }
     //println(upgrades)

@@ -9,10 +9,11 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ForgingScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.screen.slot.ForgingSlotsManager
 import net.minecraft.util.math.BlockPos
 
-class CyberForgeScreenHandler(syncId: Int, inv: PlayerInventory, private val cachedBlockPos: CachedBlockPosition) : ForgingScreenHandler(CYBER_FORGE_SCREEN_HANDLER, syncId, inv, ScreenHandlerContext.EMPTY) {
-    constructor(syncId: Int, inv: PlayerInventory, blockPos: BlockPos = BlockPos(0,0,0)) : this(syncId, inv, CachedBlockPosition(inv.player.world, blockPos, false))
+class CyberForgeScreenHandler(syncId: Int, inv: PlayerInventory, private val cachedBlockPos: CachedBlockPosition) : ForgingScreenHandler(CYBER_FORGE_SCREEN_HANDLER, syncId, inv, ScreenHandlerContext.create(inv.player.world, cachedBlockPos.blockPos)) {
+    constructor(syncId: Int, inv: PlayerInventory, blockPos: BlockPos = inv.player.blockPos) : this(syncId, inv, CachedBlockPosition(inv.player.world, blockPos, false))
 
     private var recipe: CyberForgeRecipe? = null
     private val world get() = player.world
@@ -36,5 +37,12 @@ class CyberForgeScreenHandler(syncId: Int, inv: PlayerInventory, private val cac
             output.lastRecipe = recipe
             output.setStack(0, otpt)
         }
+    }
+
+    override fun getForgingSlotsManager(): ForgingSlotsManager? {
+        return ForgingSlotsManager.create()
+            .input(0, 27, 47) { stack: ItemStack? -> true }
+            .input(1, 76, 47) { stack: ItemStack? -> true }
+                .output(2, 134, 47).build()
     }
 }

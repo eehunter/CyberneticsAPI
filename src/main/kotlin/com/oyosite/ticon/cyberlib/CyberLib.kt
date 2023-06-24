@@ -9,15 +9,17 @@ import com.oyosite.ticon.cyberlib.data.CyberForgeRecipe
 import com.oyosite.ticon.cyberlib.data.UpgradeResourceReloadListener
 import com.oyosite.ticon.cyberlib.item.Registry.registerItems
 import com.oyosite.ticon.cyberlib.power.CyberwareLayerPower
+import com.oyosite.ticon.cyberlib.registry.CyberlibRegistries
 import io.github.apace100.apoli.power.factory.PowerFactory
 import io.github.apace100.apoli.registry.ApoliRegistries
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.resource.ResourceType
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registry
 
 object CyberLib : ModInitializer {
     const val MODID = "cyberlib"
@@ -30,7 +32,9 @@ object CyberLib : ModInitializer {
         CyberForgeRecipe.SERIALIZER
         ActionRegistry.register()
         ConditionRegistry.register()
+        //CyberlibRegistries.UPGRADE
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(UpgradeResourceReloadListener)
+
     }
     private fun registerPowerFactory(factory: PowerFactory<*>): PowerFactory<*> = Registry.register(ApoliRegistries.POWER_FACTORY, factory.serializerId, factory)
 }
